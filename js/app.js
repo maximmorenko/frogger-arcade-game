@@ -35,43 +35,6 @@ class Position {
         
     }
 }
-class PositionEnemy extends Position {
-
-    run(speed, dt) {
-        this.x += (speed * dt); 
-    }
-}
-
-class PositionPlayer extends Position {
-
-    moveUp() {
-        let newLocY = this.y - cellHeight;
-        if (newLocY >= this.minY) {
-            this.y = newLocY; 
-        }
-    }
-
-    moveDown() {
-        let newLocY = this.y + cellHeight;
-        if (newLocY <= this.maxY) {
-            this.y = newLocY; 
-        }
-    }
-
-    moveRigtht() {
-        let newLocX = this.x + cellWidth;
-        if (newLocX <= this.maxX) {
-            this.x = newLocX; 
-        }
-    }
-
-    moveLeft() {
-        let newLocX = this.x - cellWidth;
-        if (newLocX >= this.minX) {
-            this.x = newLocX; 
-        }
-    }
-}
 
 class Enemy {
 
@@ -92,6 +55,13 @@ class Enemy {
 
     render = function() {
         ctx.drawImage(Resources.get(this.sprite), this.position.x, this.position.y);
+    }
+}
+
+class PositionEnemy extends Position {
+
+    run(speed, dt) {
+        this.x += (speed * dt); 
     }
 }
 
@@ -140,7 +110,44 @@ class Player {
     }
 }
 
+class PositionPlayer extends Position {
 
+    moveRigtht() {
+        let newPositionX = this.x + tileWidth;
+        if (newPositionX <= this.maxX) {
+            this.x = newPositionX; 
+        }
+    }
+
+    moveLeft() {
+        let newPositionX = this.x - tileWidth;
+        if (newPositionX >= this.minX) {
+            this.x = newPositionX; 
+        }
+    }
+
+    moveUp() {
+        let newPositionY = this.y - tileHight;
+        if (newPositionY >= this.minY) {
+            this.y = newPositionY; 
+        }
+    }
+
+    moveDown() {
+        let newPositionY = this.y + tileHight;
+        if (newPositionY <= this.maxY) {
+            this.y = newPositionY;
+        }
+    }
+}
+
+const player = new Player (new PositionPlayer( 5, 3 ));
+
+const allEnemies = [
+    new Enemy (new PositionEnemy ( 1, 0 )), 
+    new Enemy (new PositionEnemy ( 2, 0 )),
+    new Enemy (new PositionEnemy ( 3, 0 )),
+];
 
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
