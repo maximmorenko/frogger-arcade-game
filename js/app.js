@@ -1,7 +1,7 @@
 const countRows = 6;
 const countColumns = 5;
 
-const tileHight = 80;
+const tileHight = 83;
 const tileWidth = 105;
 
 class Position {
@@ -17,9 +17,9 @@ class Position {
     maxX;
     
     constructor( row, col ) {
-        // at the entrance we are waiting for the coordinates of the tiles of all members (player, enemies)
+        
         this.startX = (tileWidth * col) - (tileWidth);
-        this.startY = (tileHight * row) - (tileHight / 2); 
+        this.startY = (tileHight * row) - (tileHight / 2);
         this.x = this.startX;
         this.y = this.startY;
 
@@ -39,7 +39,7 @@ class Position {
 class Enemy {
 
     speed = (Math.floor(Math.random(4) * (500 - 100 + 1)) + 100);
-    sprite = 'images/enemy-bug.png';
+    sprite = 'images/Rock.png';
 
     constructor ( PositionEnemy ) {
         this.position = PositionEnemy;
@@ -66,7 +66,7 @@ class PositionEnemy extends Position {
 }
 
 class Player {
-    sprite = 'images/char-horn-girl.png';
+    sprite = 'images/char-princess-girl.png';
 
     constructor ( PositionPlayer ) {
         this.position = PositionPlayer;
@@ -149,13 +149,29 @@ const allEnemies = [
     new Enemy (new PositionEnemy ( 3, 0 )),
 ];
 
+function checkCollisions() {
+    const confrontEnemies = allEnemies.filter(filterConfrontEnemies, player);
+    
+    if (confrontEnemies.length) {
+        player.position.reset();
+    }
+}
+
+function filterConfrontEnemies(enemy) {
+    const fromPlayerToEnemyX = this.position.x - enemy.position.x;
+    const halftileWidth = (tileWidth / 2);
+    const isEqualY = this.position.y === enemy.position.y;
+
+    return (Math.abs(fromPlayerToEnemyX) < halftileWidth) && isEqualY;
+}
+
 document.addEventListener('keyup', function(e) {
-    var allowedKeys = {
+    let keys = {
         37: 'left',
         38: 'up',
         39: 'right',
         40: 'down'
     };
 
-    player.handleInput(allowedKeys[e.keyCode]);
+    player.handleInput(keys[e.keyCode]);
 });
